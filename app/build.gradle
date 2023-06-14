@@ -83,4 +83,7 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:$composeNavigationVersion"
     implementation "androidx.hilt:hilt-navigation-compose:$hiltComposeNavigationVersion"
 
+    //Accompanist
+    implementation "com.google.accompanist:accompanist-permissions:$accompanistVersion"
+
 }
