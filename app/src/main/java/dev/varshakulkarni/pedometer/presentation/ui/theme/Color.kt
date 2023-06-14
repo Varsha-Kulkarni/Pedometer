@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package dev.varshakulkarni.pedometer.ui.theme
+package dev.varshakulkarni.pedometer.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

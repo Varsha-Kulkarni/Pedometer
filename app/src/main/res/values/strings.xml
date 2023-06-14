@@ -16,4 +16,9 @@
 
 <resources>
     <string name="app_name">Pedometer</string>
+    <string name="permission_rationale_dialog_title">Permission needed</string>
+    <string name="permission_rationale_dialog_message">This app requires permission to access your Activity. Please Allow.</string>
+    <string name="permission_fully_denied">Please allow permission to access your Activity. Go to settings to enable</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Okay</string>
 </resources>
