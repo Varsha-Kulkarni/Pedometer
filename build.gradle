@@ -13,6 +13,7 @@ buildscript {
         coreKtxVersion = "1.10.1"
         coroutinesVersion = "1.6.4"
         daggerHiltVersion = "2.44.2"
+        dataStoreVersion = "1.0.0"
         espressoCoreVersion = "3.5.1"
         hiltComposeNavigationVersion = "1.0.0"
         jUnitVersion = "4.13.2"
@@ -20,6 +21,7 @@ buildscript {
         kotlinVersion = "1.8.20"
         lifecycleVersion = "2.6.1"
         materialDesignVersion = "1.8.0"
+        roomVersion = "2.5.2"
     }
 }
 plugins {
