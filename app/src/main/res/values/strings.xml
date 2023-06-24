@@ -21,4 +21,10 @@
     <string name="permission_fully_denied">Please allow permission to access your Activity. Go to settings to enable</string>
     <string name="cancel">Cancel</string>
     <string name="ok">Okay</string>
+    <string name="step"/>
+    <string name="steps_count">%d Steps</string>
+    <string name="no_record">No Steps recorded for today</string>
+    <string name="notification_channel_name">Step Updates</string>
+    <string name="charts_nav">Navigate to Charts</string>
+    <string name="set_target">Set Steps target</string>
 </resources>
