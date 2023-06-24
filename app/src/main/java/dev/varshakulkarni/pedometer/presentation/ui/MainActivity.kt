@@ -41,11 +41,14 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import dagger.hilt.android.AndroidEntryPoint
 import dev.varshakulkarni.pedometer.R
+import dev.varshakulkarni.pedometer.StepsService
+import dev.varshakulkarni.pedometer.presentation.navigation.PedometerNavigation
 import dev.varshakulkarni.pedometer.presentation.ui.components.PermissionDialog
 import dev.varshakulkarni.pedometer.presentation.ui.theme.PedometerTheme
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -80,7 +83,8 @@ class MainActivity : ComponentActivity() {
 
         when {
             permissionState.status.isGranted -> {
-
+                startStepsService()
+                PedometerNavigation()
             }
 
             !permissionAlreadyRequested && !permissionState.status.shouldShowRationale -> {
@@ -114,6 +118,11 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    private fun startStepsService() {
+        val serviceIntent = Intent(this, StepsService::class.java)
+        startForegroundService(serviceIntent)
     }
 }
 

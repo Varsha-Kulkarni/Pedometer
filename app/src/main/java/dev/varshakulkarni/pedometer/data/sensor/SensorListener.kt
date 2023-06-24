@@ -30,7 +30,7 @@ class SensorListener @Inject constructor(
     private val sensorManager: SensorManager
 ) : SensorEventListener {
 
-    private val _sensorSteps = MutableStateFlow(0)
+    private val _sensorSteps = MutableStateFlow(-1)
     val sensorSteps = _sensorSteps.asStateFlow()
 
     private val _isReceivingUpdates = MutableStateFlow(false)

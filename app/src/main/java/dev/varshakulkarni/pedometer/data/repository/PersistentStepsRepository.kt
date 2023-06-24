@@ -16,6 +16,7 @@
  */
 package dev.varshakulkarni.pedometer.data.repository
 
+import android.util.Log
 import dev.varshakulkarni.pedometer.data.persistence.dao.StepDao
 import dev.varshakulkarni.pedometer.data.persistence.entity.StepEntity
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,18 +60,20 @@ class PersistentStepsRepository @Inject constructor(
     suspend fun calculateSteps(sensorCount: Int) {
 
         val unixTime = System.currentTimeMillis()
-
         var totalSteps = 0
-
         val previousData: StepEntity? =
             getPreviousStepsForUser("uid").firstOrNull()
 
+        Log.d("PersistentStepsRepository", "calculateSteps $previousData $sensorCount")
         if (previousData != null) {
+            totalSteps = previousData.totalStepCount
+
             val currentDate = LocalDateTime.now()
             val previousDate = LocalDateTime.ofInstant(
                 Instant.ofEpochMilli(previousData.timestamp),
                 ZoneId.systemDefault()
             )
+
             if (currentDate.dayOfMonth == previousDate.dayOfMonth && currentDate.month == previousDate.month) {
                 if (sensorCount != 0) {
                     if (sensorCount != previousData.sensorStepCount) {
@@ -93,6 +96,23 @@ class PersistentStepsRepository @Inject constructor(
                                 )
                             )
                         } else {
+                            if (currentDate.hour - previousDate.hour > 1) {
+                                val n = currentDate.hour - previousDate.hour
+                                var i = 1L
+                                while (n > i) {
+                                    insertSteps(
+                                        StepEntity(
+                                            uid = "uid",
+                                            totalStepCount = previousData.totalStepCount,
+                                            timestamp = previousDate.plusHours(i)
+                                                .atZone(ZoneId.systemDefault()).toEpochSecond()*1000L,
+                                            sensorStepCount = previousData.totalStepCount,
+                                            diff = 0
+                                        )
+                                    )
+                                    i++
+                                }
+                            }
                             insertSteps(
                                 StepEntity(
                                     uid = "uid",
@@ -129,10 +149,16 @@ class PersistentStepsRepository @Inject constructor(
                 )
             }
         } else {
-            insertSteps(StepEntity("uid", totalSteps, unixTime, sensorCount, 0))
+            var i = 7
+            while (0 <= i) {
+                Log.d("","${unixTime-(3600000 * i)}")
+                insertSteps(StepEntity("uid", totalSteps, unixTime-(3600000 * i), sensorCount, 0))
+                i--
+            }
         }
         _steps.value = totalSteps
     }
 
     private suspend fun updateStepData(stepEntity: StepEntity) = stepsDao.updateStepData(stepEntity)
 }
+
