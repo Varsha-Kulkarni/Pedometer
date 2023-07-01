@@ -16,6 +16,7 @@
  */
 package dev.varshakulkarni.pedometer.di
 
+import android.app.AlarmManager
 import android.app.Application
 import android.app.NotificationManager
 import android.content.Context
@@ -49,4 +50,9 @@ object AppModule {
     @Singleton
     fun provideNotificationManager(application: Application) =
         application.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+    @Provides
+    @Singleton
+    fun provideAlarmManager(application: Application) =
+        application.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 }

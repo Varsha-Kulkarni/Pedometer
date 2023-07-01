@@ -14,21 +14,8 @@
  *  limitations under the License.
  *
  */
-package dev.varshakulkarni.pedometer
+package dev.varshakulkarni.pedometer.utils
 
-import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
-import dev.varshakulkarni.pedometer.utils.Utils
-import javax.inject.Inject
-
-@HiltAndroidApp
-class PedometerApp : Application() {
-    @Inject
-    lateinit var utils: Utils
-
-    override fun onCreate() {
-        super.onCreate()
-
-        utils.setAlarmToResetStepCount(this)
-    }
+object Constants {
+    const val RESET_ALARM_ID = 567
 }
