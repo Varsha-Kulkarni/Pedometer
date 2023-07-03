@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import dev.varshakulkarni.pedometer.R
 
 @Composable
-fun PermissionDialog(
+fun PedometerDialog(
     modifier: Modifier = Modifier,
     dialogTitle: Int,
     dialogText: Int,

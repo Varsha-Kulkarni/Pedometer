@@ -24,6 +24,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import dev.varshakulkarni.pedometer.utils.Constants.DEFAULT_TARGET
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -33,7 +34,7 @@ val Context.settingsDataStore: DataStore<Preferences> by preferencesDataStore(na
 
 interface DataStoreRepository {
 
-    suspend fun putInt(key: String, value: Int)
+    suspend fun putInt(value: Int)
     val targetFlow: Flow<Int>
 }
 
@@ -41,15 +42,15 @@ class DataStoreRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : DataStoreRepository {
 
-    override suspend fun putInt(key: String, value: Int) {
+    override suspend fun putInt(value: Int) {
         dataStore.edit { preferences ->
             preferences[STEPS_TARGET] = value
         }
     }
 
-    override val targetFlow: Flow<Int> = dataStore.data.catch { emit(emptyPreferences())}.map{ preference-> preference[STEPS_TARGET] ?: 6000}
+    override val targetFlow: Flow<Int> = dataStore.data.catch { emit(emptyPreferences())}.map{ preference-> preference[STEPS_TARGET] ?: DEFAULT_TARGET}
 
     companion object {
-        val STEPS_TARGET = intPreferencesKey("Steps_Target")
+        val STEPS_TARGET = intPreferencesKey("StepsTarget")
     }
 }

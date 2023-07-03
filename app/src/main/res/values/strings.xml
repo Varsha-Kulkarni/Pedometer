@@ -27,4 +27,7 @@
     <string name="notification_channel_name">Step Updates</string>
     <string name="charts_nav">Navigate to Charts</string>
     <string name="set_target">Set Steps target</string>
+    <string name="daily_target">Set a daily target to stay active and healthy</string>
+    <string name="target_header">Daily Target</string>
+    <string name="back">Back</string>
 </resources>

@@ -28,12 +28,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.varshakulkarni.pedometer.R
 import dev.varshakulkarni.pedometer.presentation.viewmodels.PedometerViewModel
 
@@ -45,7 +45,7 @@ fun PedometerScreen(
     onNavToSetTarget: () -> Unit
 ) {
 
-    val steps = viewModel.state.collectAsState()
+    val steps = viewModel.state.collectAsStateWithLifecycle()
     val message =
         if (steps.value.steps > 0) {
             stringResource(id = R.string.steps_count, steps.value.steps)

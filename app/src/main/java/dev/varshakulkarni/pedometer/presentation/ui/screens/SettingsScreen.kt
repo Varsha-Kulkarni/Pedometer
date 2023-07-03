@@ -15,11 +15,82 @@
  */
 package dev.varshakulkarni.pedometer.presentation.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.varshakulkarni.pedometer.R
+import dev.varshakulkarni.pedometer.presentation.ui.components.NumberPicker
 import dev.varshakulkarni.pedometer.presentation.viewmodels.SettingsViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel, onNavigationUp: () -> Unit) {
+    val state = viewModel.state.collectAsStateWithLifecycle()
 
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(id = R.string.app_name)) },
+                navigationIcon = {
+                    IconButton(
+                        modifier = Modifier.padding(start = 4.dp),
+                        onClick = onNavigationUp
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.ic_back),
+                            stringResource(id = R.string.back),
+                        )
+                    }
+                },
+            )
+        },
 
+        content = { paddingValues ->
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+
+                val values = remember { (1000..15000 step 100).map { it } }
+
+                Text(
+                    text = stringResource(id = R.string.daily_target),
+                    modifier = Modifier.padding(vertical = 16.dp)
+                )
+
+                if(state.value.target > 0) {
+                    NumberPicker(
+                        items = values,
+                        visibleItemsCount = 3,
+                        startIndex = values.indexOf(state.value.target),
+                        modifier = Modifier.weight(0.3f),
+                        textModifier = Modifier.padding(8.dp),
+                        textStyle = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
+                        onTargetSelected = { target -> viewModel.updateTarget(target) }
+                    )
+                }
+            }
+        })
 }
