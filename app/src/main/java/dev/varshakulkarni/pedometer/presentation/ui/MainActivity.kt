@@ -17,12 +17,9 @@
 package dev.varshakulkarni.pedometer.presentation.ui
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -45,8 +42,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.varshakulkarni.pedometer.R
 import dev.varshakulkarni.pedometer.StepsService
 import dev.varshakulkarni.pedometer.presentation.navigation.PedometerNavigation
-import dev.varshakulkarni.pedometer.presentation.ui.components.PermissionDialog
+import dev.varshakulkarni.pedometer.presentation.ui.components.PedometerDialog
 import dev.varshakulkarni.pedometer.presentation.ui.theme.PedometerTheme
+import dev.varshakulkarni.pedometer.utils.openAppSettings
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -97,7 +95,7 @@ class MainActivity : ComponentActivity() {
 
             permissionState.status.shouldShowRationale -> {
                 if (showDialog) {
-                    PermissionDialog(
+                    PedometerDialog(
                         dialogTitle = R.string.permission_rationale_dialog_title,
                         dialogText = R.string.permission_rationale_dialog_message,
                         onDismiss = { showDialog = false },
@@ -110,11 +108,11 @@ class MainActivity : ComponentActivity() {
             }
 
             else -> {
-                PermissionDialog(
+                PedometerDialog(
                     dialogTitle = R.string.permission_rationale_dialog_title,
                     dialogText = R.string.permission_fully_denied,
                     onDismiss = { showDialog = false },
-                    onOkay = ::openAppSettings
+                    onOkay = { openAppSettings() }
                 )
             }
         }
@@ -124,11 +122,4 @@ class MainActivity : ComponentActivity() {
         val serviceIntent = Intent(this, StepsService::class.java)
         startForegroundService(serviceIntent)
     }
-}
-
-fun Activity.openAppSettings() {
-    Intent(
-        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-        Uri.fromParts("package", packageName, null)
-    ).also(::startActivity)
 }

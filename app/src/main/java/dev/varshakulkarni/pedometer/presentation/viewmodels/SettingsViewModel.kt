@@ -22,6 +22,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.varshakulkarni.pedometer.data.repository.DataStoreRepository
 import dev.varshakulkarni.pedometer.presentation.states.SettingState
+import dev.varshakulkarni.pedometer.utils.Constants.DEFAULT_TARGET
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
@@ -43,18 +44,18 @@ class SettingsViewModel @Inject constructor(
 
     private fun observeTarget() {
         viewModelScope.launch {
+            val target = repository.targetFlow.first()
             _state.update {state->
                 state.copy(
-                    target = repository.targetFlow.first()
+                    target = if(target > 0) target else DEFAULT_TARGET
                 )
             }
         }
-
     }
 
     fun updateTarget(target: Int){
         viewModelScope.launch {
-            repository.putInt("StepsTarget", target)
+            repository.putInt(target)
         }
     }
 }

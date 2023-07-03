@@ -18,4 +18,5 @@ package dev.varshakulkarni.pedometer.utils
 
 object Constants {
     const val RESET_ALARM_ID = 567
+    const val DEFAULT_TARGET = 6000
 }

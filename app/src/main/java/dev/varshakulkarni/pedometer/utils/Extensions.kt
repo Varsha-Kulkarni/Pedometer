@@ -15,12 +15,23 @@
  */
 package dev.varshakulkarni.pedometer.utils
 
+import android.app.Activity
 import android.content.BroadcastReceiver
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
+
+fun Activity.openAppSettings() {
+    Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", packageName, null)
+    ).also(::startActivity)
+}
 
 fun BroadcastReceiver.goAsync(
     context: CoroutineContext = EmptyCoroutineContext,
