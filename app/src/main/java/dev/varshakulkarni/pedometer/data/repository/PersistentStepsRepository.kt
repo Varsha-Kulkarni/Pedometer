@@ -20,6 +20,7 @@ import android.util.Log
 import dev.varshakulkarni.pedometer.data.persistence.dao.StepDao
 import dev.varshakulkarni.pedometer.data.persistence.entity.StepEntity
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
@@ -32,9 +33,10 @@ import javax.inject.Singleton
 @Singleton
 class PersistentStepsRepository @Inject constructor(
     private val stepsDao: StepDao
-) {
-    private val _steps = MutableStateFlow(0)
-    val steps = _steps.asStateFlow()
+)  {
+
+    val _steps = MutableStateFlow(0)
+    val steps: StateFlow<Int> = _steps.asStateFlow()
 
     private suspend fun insertSteps(stepEntity: StepEntity) =
         stepsDao.insertSteps(stepEntity)
@@ -53,8 +55,6 @@ class PersistentStepsRepository @Inject constructor(
                     )
                 }
             }
-
-    fun getStepsData() = stepsDao.getStepsForUser("uid")
 
 
     suspend fun calculateSteps(sensorCount: Int) {
@@ -83,60 +83,34 @@ class PersistentStepsRepository @Inject constructor(
                             sensorCount + previousData.totalStepCount
                         }
                         val diff = (totalSteps - previousData.totalStepCount)
-
-                        if (currentDate.hour == previousDate.hour) {
-                            val count = previousData.totalStepCount + diff
-                            totalSteps = count
-                            updateStepData(
-                                StepEntity(
-                                    "uid",
-                                    totalSteps,
-                                    unixTime,
-                                    sensorCount, diff + previousData.diff, previousData.id
-                                )
+                        updateStepData(
+                            StepEntity(
+                                "uid",
+                                totalSteps,
+                                unixTime,
+                                sensorCount, diff + previousData.diff, previousData.id
                             )
-                        } else {
-                            if (currentDate.hour - previousDate.hour > 1) {
-                                val n = currentDate.hour - previousDate.hour
-                                var i = 1L
-                                while (n > i) {
-                                    insertSteps(
-                                        StepEntity(
-                                            uid = "uid",
-                                            totalStepCount = previousData.totalStepCount,
-                                            timestamp = previousDate.plusHours(i)
-                                                .atZone(ZoneId.systemDefault()).toEpochSecond()*1000L,
-                                            sensorStepCount = previousData.totalStepCount,
-                                            diff = 0
-                                        )
-                                    )
-                                    i++
-                                }
-                            }
-                            insertSteps(
-                                StepEntity(
-                                    uid = "uid",
-                                    totalStepCount = totalSteps,
-                                    timestamp = unixTime,
-                                    sensorStepCount = sensorCount,
-                                    diff = diff
-                                )
-                            )
-                        }
-                    }
-                } else {
-                    totalSteps = previousData.totalStepCount
-                    updateStepData(
-                        StepEntity(
-                            "uid",
-                            totalSteps,
-                            unixTime,
-                            previousData.sensorStepCount, 0,
-                            previousData.id
                         )
-                    )
+                    }
                 }
             } else {
+                val n = currentDate.dayOfMonth - previousDate.dayOfMonth
+                if (n > 1) {
+                    var i = 1L
+                    while (n > i) {
+                        insertSteps(
+                            StepEntity(
+                                uid = "uid",
+                                totalStepCount = previousData.totalStepCount,
+                                timestamp = previousDate.plusDays(i)
+                                    .atZone(ZoneId.systemDefault()).toEpochSecond() * 1000L,
+                                sensorStepCount = previousData.totalStepCount,
+                                diff = 0
+                            )
+                        )
+                        i++
+                    }
+                }
                 totalSteps = 0
                 insertSteps(
                     StepEntity(
@@ -151,8 +125,8 @@ class PersistentStepsRepository @Inject constructor(
         } else {
             var i = 7
             while (0 <= i) {
-                Log.d("","${unixTime-(3600000 * i)}")
-                insertSteps(StepEntity("uid", totalSteps, unixTime-(3600000 * i), sensorCount, 0))
+                Log.d("", "${unixTime - (3600000 * i)}")
+                insertSteps(StepEntity("uid", totalSteps, unixTime - (3600000 * i), sensorCount, 0))
                 i--
             }
         }
