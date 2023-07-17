@@ -16,6 +16,9 @@
  */
 package dev.varshakulkarni.pedometer.presentation.ui.screens
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +31,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -45,13 +53,23 @@ fun PedometerScreen(
     onNavToSetTarget: () -> Unit
 ) {
 
-    val steps = viewModel.state.collectAsStateWithLifecycle()
-    val message =
-        if (steps.value.steps > 0) {
-            stringResource(id = R.string.steps_count, steps.value.steps)
-        } else {
-            stringResource(id = R.string.no_record)
+    val state = viewModel.state.collectAsStateWithLifecycle()
+
+    var stepsAnimated by remember { mutableStateOf(0) }
+    val stepsCounter by animateIntAsState(
+        targetValue = stepsAnimated,
+        animationSpec = tween(
+            durationMillis = 400,
+            easing = FastOutSlowInEasing
+        )
+    )
+    if (state.value.steps > 0) {
+        LaunchedEffect(Unit) {
+            stepsAnimated = state.value.steps
         }
+    }
+
+    val message = stringResource(id = R.string.steps_count, stepsCounter)
 
     Scaffold(
         topBar = {
@@ -65,8 +83,10 @@ fun PedometerScreen(
                         )
                     }
                     IconButton(onClick = onNavToSetTarget) {
-                        Icon(painterResource(id = R.drawable.ic_settings),
-                         stringResource(id = R.string.set_target))
+                        Icon(
+                            painterResource(id = R.drawable.ic_settings),
+                            stringResource(id = R.string.set_target)
+                        )
                     }
                 }
             )
