@@ -56,6 +56,7 @@ class PersistentStepsRepository @Inject constructor(
                 }
             }
 
+    fun getStepsData() = stepsDao.getStepsForUser("uid")
 
     suspend fun calculateSteps(sensorCount: Int) {
 
@@ -104,7 +105,7 @@ class PersistentStepsRepository @Inject constructor(
                                 totalStepCount = previousData.totalStepCount,
                                 timestamp = previousDate.plusDays(i)
                                     .atZone(ZoneId.systemDefault()).toEpochSecond() * 1000L,
-                                sensorStepCount = previousData.totalStepCount,
+                                sensorStepCount = previousData.sensorStepCount,
                                 diff = 0
                             )
                         )
@@ -125,8 +126,15 @@ class PersistentStepsRepository @Inject constructor(
         } else {
             var i = 7
             while (0 <= i) {
-                Log.d("", "${unixTime - (3600000 * i)}")
-                insertSteps(StepEntity("uid", totalSteps, unixTime - (3600000 * i), sensorCount, 0))
+                insertSteps(
+                    StepEntity(
+                        "uid",
+                        totalSteps,
+                        unixTime - (3600000 * 24 * i),
+                        sensorCount,
+                        0
+                    )
+                )
                 i--
             }
         }

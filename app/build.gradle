@@ -51,6 +51,7 @@ android {
 
 dependencies {
 
+    implementation files('libs/scrollablebarchart-1.0.aar')
     implementation "androidx.core:core-ktx:$coreKtxVersion"
 
     // Lifecycle

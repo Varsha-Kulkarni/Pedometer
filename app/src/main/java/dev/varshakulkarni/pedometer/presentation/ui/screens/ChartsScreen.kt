@@ -16,9 +16,81 @@
  */
 package dev.varshakulkarni.pedometer.presentation.ui.screens
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import dev.varshakulkarni.pedometer.R
 import dev.varshakulkarni.pedometer.presentation.viewmodels.ChartViewModel
+import dev.varshakulkarni.scrollablebarchart.ChartData
+import dev.varshakulkarni.scrollablebarchart.ChartDefaults
+import dev.varshakulkarni.scrollablebarchart.SPACING_MEDIUM
+import dev.varshakulkarni.scrollablebarchart.ui.chart.RTLScrollableBarChart
+import dev.varshakulkarni.scrollablebarchart.utils.ComposeImmutableList
+import dev.varshakulkarni.scrollablebarchart.utils.rememberComposeImmutableList
 
 @Composable
 fun ChartsScreen(viewModel: ChartViewModel, onNavigationUp: () -> Unit) {
+    val state by viewModel.state.collectAsState()
+
+    val chartData by rememberComposeImmutableList {
+        state.bars
+    }
+    ChartsContent(
+        stepData = chartData,
+        target = state.target,
+        modifier = Modifier,
+        onNavigationUp = onNavigationUp
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun ChartsContent(
+    stepData: ComposeImmutableList<ChartData>,
+    target: Int,
+    modifier: Modifier,
+    onNavigationUp: () -> Unit
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(id = R.string.app_name)) },
+                navigationIcon = {
+                    IconButton(
+                        modifier = Modifier.padding(start = 4.dp),
+                        onClick = onNavigationUp
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.ic_back),
+                            "Back",
+                        )
+                    }
+                },
+            )
+        },
+
+        content = {
+            Column(modifier = modifier.padding(it)) {
+                if (stepData.isNotEmpty())
+                    RTLScrollableBarChart(
+                        chartData = stepData,
+                        target = target,
+                        modifier = modifier.padding(SPACING_MEDIUM.dp),
+                        chartSize = ChartDefaults.chartSize(600.dp, 500.dp)
+                    )
+            }
+        }
+    )
 }

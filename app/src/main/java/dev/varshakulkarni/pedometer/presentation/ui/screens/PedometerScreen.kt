@@ -55,6 +55,16 @@ fun PedometerScreen(
 
     val state = viewModel.state.collectAsStateWithLifecycle()
 
+    PedometerContent(state.value.steps, onNavigateToCharts, onNavToSetTarget)
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun PedometerContent(
+    steps: Int,
+    onNavigateToCharts: () -> Unit,
+    onNavToSetTarget: () -> Unit
+) {
     var stepsAnimated by remember { mutableStateOf(0) }
     val stepsCounter by animateIntAsState(
         targetValue = stepsAnimated,
@@ -63,9 +73,9 @@ fun PedometerScreen(
             easing = FastOutSlowInEasing
         )
     )
-    if (state.value.steps > 0) {
+    if (steps > 0) {
         LaunchedEffect(Unit) {
-            stepsAnimated = state.value.steps
+            stepsAnimated = steps
         }
     }
 
