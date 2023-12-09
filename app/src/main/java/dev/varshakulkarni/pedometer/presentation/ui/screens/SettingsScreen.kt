@@ -26,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,12 +40,26 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.varshakulkarni.pedometer.R
 import dev.varshakulkarni.pedometer.presentation.ui.components.NumberPicker
 import dev.varshakulkarni.pedometer.presentation.viewmodels.SettingsViewModel
+import dev.varshakulkarni.scrollablebarchart.utils.rememberComposeImmutableList
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel, onNavigationUp: () -> Unit) {
-    val state = viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
+    SettingsContent(
+        target = state.target,
+        onUpdateTarget = { viewModel.updateTarget(it) },
+        onNavigationUp = onNavigationUp
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun SettingsContent(
+    target: Int,
+    onUpdateTarget: (Int) -> Unit,
+    onNavigationUp: () -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -74,21 +89,24 @@ fun SettingsScreen(viewModel: SettingsViewModel, onNavigationUp: () -> Unit) {
             ) {
 
                 val values = remember { (1000..15000 step 100).map { it } }
+                val immutableList by rememberComposeImmutableList {
+                    values
+                }
 
                 Text(
                     text = stringResource(id = R.string.daily_target),
                     modifier = Modifier.padding(vertical = 16.dp)
                 )
 
-                if(state.value.target > 0) {
+                if (target > 0) {
                     NumberPicker(
-                        items = values,
+                        items = immutableList,
                         visibleItemsCount = 3,
-                        startIndex = values.indexOf(state.value.target),
+                        startIndex = values.indexOf(target),
                         modifier = Modifier.weight(0.3f),
                         textModifier = Modifier.padding(8.dp),
                         textStyle = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
-                        onTargetSelected = { target -> viewModel.updateTarget(target) }
+                        onTargetSelected = onUpdateTarget
                     )
                 }
             }

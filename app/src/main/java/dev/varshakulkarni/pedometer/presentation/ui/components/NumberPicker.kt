@@ -43,6 +43,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import dev.varshakulkarni.pedometer.utils.Constants.DEFAULT_TARGET
+import dev.varshakulkarni.scrollablebarchart.utils.ComposeImmutableList
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -51,7 +52,7 @@ import kotlinx.coroutines.flow.map
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NumberPicker(
-    items: List<Int>,
+    items: ComposeImmutableList<Int>,
     modifier: Modifier = Modifier,
     startIndex: Int = items.indexOf(DEFAULT_TARGET),
     visibleItemsCount: Int = 3,
