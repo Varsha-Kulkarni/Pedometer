@@ -42,7 +42,6 @@ class StepsService : LifecycleService() {
     @Inject
     lateinit var notificationHelper: NotificationHelper
 
-
     private var started = false
 
     override fun onCreate() {
@@ -96,7 +95,6 @@ class StepsService : LifecycleService() {
 
         return null
     }
-
 
     private fun showNotification() {
         notificationHelper.createNotificationChannel(this)

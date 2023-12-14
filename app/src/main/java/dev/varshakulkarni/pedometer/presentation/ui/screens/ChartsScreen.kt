@@ -1,18 +1,17 @@
 /*
- *  Copyright 2023 Varsha Kulkarni
+ * Copyright 2023 Varsha Kulkarni
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package dev.varshakulkarni.pedometer.presentation.ui.screens
 
@@ -33,32 +32,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.varshakulkarni.pedometer.R
 import dev.varshakulkarni.pedometer.presentation.viewmodels.ChartViewModel
-import dev.varshakulkarni.scrollablebarchart.ChartData
+import dev.varshakulkarni.scrollablebarchart.ChartDataCollection
 import dev.varshakulkarni.scrollablebarchart.ChartDefaults
 import dev.varshakulkarni.scrollablebarchart.SPACING_MEDIUM
 import dev.varshakulkarni.scrollablebarchart.ui.chart.RTLScrollableBarChart
-import dev.varshakulkarni.scrollablebarchart.utils.ComposeImmutableList
-import dev.varshakulkarni.scrollablebarchart.utils.rememberComposeImmutableList
 
 @Composable
 fun ChartsScreen(viewModel: ChartViewModel, onNavigationUp: () -> Unit) {
     val state by viewModel.state.collectAsState()
 
-    val chartData by rememberComposeImmutableList {
-        state.bars
+    if (state.bars.isNotEmpty()) {
+        ChartsContent(
+            stepDataCollection = ChartDataCollection(state.bars),
+            target = state.target,
+            modifier = Modifier,
+            onNavigationUp = onNavigationUp
+        )
     }
-    ChartsContent(
-        stepData = chartData,
-        target = state.target,
-        modifier = Modifier,
-        onNavigationUp = onNavigationUp
-    )
 }
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun ChartsContent(
-    stepData: ComposeImmutableList<ChartData>,
+    stepDataCollection: ChartDataCollection,
     target: Int,
     modifier: Modifier,
     onNavigationUp: () -> Unit
@@ -83,13 +79,12 @@ private fun ChartsContent(
 
         content = {
             Column(modifier = modifier.padding(it)) {
-                if (stepData.isNotEmpty())
-                    RTLScrollableBarChart(
-                        chartData = stepData,
-                        target = target,
-                        modifier = modifier.padding(SPACING_MEDIUM.dp),
-                        chartSize = ChartDefaults.chartSize(600.dp, 500.dp)
-                    )
+                RTLScrollableBarChart(
+                    chartDataCollection = stepDataCollection,
+                    target = target,
+                    modifier = modifier.padding(SPACING_MEDIUM.dp),
+                    chartSize = ChartDefaults.chartSize(600.dp, 500.dp)
+                )
             }
         }
     )
