@@ -40,7 +40,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.varshakulkarni.pedometer.R
 import dev.varshakulkarni.pedometer.presentation.ui.components.NumberPicker
 import dev.varshakulkarni.pedometer.presentation.viewmodels.SettingsViewModel
-import dev.varshakulkarni.scrollablebarchart.utils.rememberComposeImmutableList
+import dev.varshakulkarni.pedometer.utils.rememberComposeImmutableList
 
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel, onNavigationUp: () -> Unit) {
@@ -110,5 +110,6 @@ private fun SettingsContent(
                     )
                 }
             }
-        })
+        }
+    )
 }
