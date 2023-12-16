@@ -3,10 +3,6 @@ This app is built using Jetpack Compose which tracks user's daily steps using `T
 The app locally stores the steps history, also includes a bar chart to compare the progress against the set target. 
 It uses [scrollablebarchart-compose](https://github.com/Varsha-Kulkarni/scrollablebarchart-compose) to plot the barchart.
 
-# Contributions
-
-Most welcome to file issues, PRs, specially where performance could be improved. Please see [Contributing Guidelines](https://github.com/Varsha-Kulkarni/scrollablebarchart-compose/blob/main/CONTRIBUTING.md)
-
 # License
 
 ```
