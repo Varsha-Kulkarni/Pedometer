@@ -15,9 +15,9 @@
  */
 package dev.varshakulkarni.pedometer.presentation.states
 
-import dev.varshakulkarni.scrollablebarchart.ChartData
+import dev.varshakulkarni.scrollablebarchart.BarChartData
 
 data class ChartState(
-    val bars: List<ChartData> = emptyList(),
+    val bars: List<BarChartData> = emptyList(),
     val target: Int = 6000
 )

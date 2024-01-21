@@ -32,8 +32,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.varshakulkarni.pedometer.R
 import dev.varshakulkarni.pedometer.presentation.viewmodels.ChartViewModel
-import dev.varshakulkarni.scrollablebarchart.ChartDataCollection
-import dev.varshakulkarni.scrollablebarchart.ChartDefaults
+import dev.varshakulkarni.scrollablebarchart.BarChartDataCollection
+import dev.varshakulkarni.scrollablebarchart.BarChartDefaults
 import dev.varshakulkarni.scrollablebarchart.SPACING_MEDIUM
 import dev.varshakulkarni.scrollablebarchart.ui.chart.RTLScrollableBarChart
 
@@ -43,7 +43,7 @@ fun ChartsScreen(viewModel: ChartViewModel, onNavigationUp: () -> Unit) {
 
     if (state.bars.isNotEmpty()) {
         ChartsContent(
-            stepDataCollection = ChartDataCollection(state.bars),
+            stepDataCollection = BarChartDataCollection(state.bars),
             target = state.target,
             modifier = Modifier,
             onNavigationUp = onNavigationUp
@@ -54,7 +54,7 @@ fun ChartsScreen(viewModel: ChartViewModel, onNavigationUp: () -> Unit) {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun ChartsContent(
-    stepDataCollection: ChartDataCollection,
+    stepDataCollection: BarChartDataCollection,
     target: Int,
     modifier: Modifier,
     onNavigationUp: () -> Unit
@@ -80,10 +80,10 @@ private fun ChartsContent(
         content = {
             Column(modifier = modifier.padding(it)) {
                 RTLScrollableBarChart(
-                    chartDataCollection = stepDataCollection,
+                    barChartDataCollection = stepDataCollection,
                     target = target,
                     modifier = modifier.padding(SPACING_MEDIUM.dp),
-                    chartSize = ChartDefaults.chartSize(600.dp, 500.dp)
+                    chartSize = BarChartDefaults.chartSize(600.dp, 500.dp)
                 )
             }
         }
