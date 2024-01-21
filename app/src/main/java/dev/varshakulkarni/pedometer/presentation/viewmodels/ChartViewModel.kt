@@ -22,7 +22,7 @@ import dev.varshakulkarni.pedometer.data.repository.DataStoreRepository
 import dev.varshakulkarni.pedometer.data.repository.PersistentStepsRepository
 import dev.varshakulkarni.pedometer.presentation.states.ChartState
 import dev.varshakulkarni.pedometer.utils.Constants
-import dev.varshakulkarni.scrollablebarchart.ChartData
+import dev.varshakulkarni.scrollablebarchart.BarChartData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -68,7 +68,7 @@ class ChartViewModel @Inject constructor(
                 _state.update { state ->
                     state.copy(
                         bars = it.map { step ->
-                            ChartData(
+                            BarChartData(
                                 Instant.ofEpochMilli(step.timestamp)
                                     .atZone(ZoneId.systemDefault())
                                     .dayOfMonth,
