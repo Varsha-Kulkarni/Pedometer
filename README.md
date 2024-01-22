@@ -3,6 +3,25 @@ This app is built using Jetpack Compose which tracks user's daily steps using `T
 The app locally stores the steps history, also includes a bar chart to compare the progress against the set target. 
 It uses [scrollablebarchart-compose](https://github.com/Varsha-Kulkarni/scrollablebarchart-compose) to plot the barchart.
 
+This app is built with following Android Dev Features:
+
+- Jetpack Compose for simple UI
+- Foreground Service for Steps Updates
+- Room Database for persisting every day steps
+- Hilt for DI
+- Kotlin State Flow for collecting emitted step counts
+- Kotlin Coroutines for interacting with DB
+- UDF with modern android dev Jetpack components and Google recommended architecture.
+
+##  Screenshots
+
+<img src="/results/screenshot_1.jpeg" width="160">&emsp;<img src="/results/screenshot_2.jpeg" width="160">&emsp;<img src="/results/screenshot_3.jpeg" width="160">&emsp;<img src="/results/screenshot_4.jpeg" width="160">
+
+
+# Contributions
+
+Most welcome to file issues, PRs.
+
 # License
 
 ```
