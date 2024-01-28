@@ -117,7 +117,7 @@ class PersistentStepsRepository @Inject constructor(
                         "uid",
                         totalSteps,
                         unixTime,
-                        previousData.sensorStepCount,
+                        sensorCount,
                         0
                     )
                 )
