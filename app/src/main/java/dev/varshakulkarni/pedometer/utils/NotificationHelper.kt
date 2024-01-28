@@ -65,6 +65,7 @@ class NotificationHelper @Inject constructor(private val notificationManager: No
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+            .setSilent(true)
             .build()
     }
 
