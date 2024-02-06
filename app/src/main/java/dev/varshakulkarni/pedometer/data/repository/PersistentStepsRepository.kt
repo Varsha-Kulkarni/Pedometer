@@ -76,22 +76,24 @@ class PersistentStepsRepository @Inject constructor(
 
             if (currentDate.dayOfMonth == previousDate.dayOfMonth && currentDate.month == previousDate.month) {
                 if (sensorCount != 0) {
-                    if (sensorCount != previousData.sensorStepCount) {
-                        totalSteps = if (sensorCount > previousData.sensorStepCount) {
+                    totalSteps = if (sensorCount >= previousData.sensorStepCount) {
+                        if (previousData.sensorStepCount != 0)
                             sensorCount - previousData.sensorStepCount + previousData.totalStepCount
-                        } else {
-                            sensorCount + previousData.totalStepCount
-                        }
-                        val diff = (totalSteps - previousData.totalStepCount)
-                        updateStepData(
-                            StepEntity(
-                                "uid",
-                                totalSteps,
-                                unixTime,
-                                sensorCount, diff + previousData.diff, previousData.id
-                            )
-                        )
+                        else previousData.totalStepCount
+                    } else {
+                        previousData.totalStepCount
                     }
+                    val diff =
+                        if (totalSteps > previousData.totalStepCount) totalSteps - previousData.totalStepCount else 0
+
+                    updateStepData(
+                        StepEntity(
+                            "uid",
+                            totalSteps,
+                            unixTime,
+                            sensorCount, diff + previousData.diff, previousData.id
+                        )
+                    )
                 }
             } else {
                 val n = currentDate.dayOfMonth - previousDate.dayOfMonth
@@ -101,10 +103,10 @@ class PersistentStepsRepository @Inject constructor(
                         insertSteps(
                             StepEntity(
                                 uid = "uid",
-                                totalStepCount = previousData.totalStepCount,
+                                totalStepCount = totalSteps,
                                 timestamp = previousDate.plusDays(i)
                                     .atZone(ZoneId.systemDefault()).toEpochSecond() * 1000L,
-                                sensorStepCount = previousData.sensorStepCount,
+                                sensorStepCount = sensorCount,
                                 diff = 0
                             )
                         )
