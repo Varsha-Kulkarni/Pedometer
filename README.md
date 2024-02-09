@@ -15,7 +15,8 @@ This app is built with following Android Dev Features:
 
 ##  Screenshots
 
-<img src="/results/screenshot_1.jpeg" width="160">&emsp;<img src="/results/screenshot_2.jpeg" width="160">&emsp;<img src="/results/screenshot_3.jpeg" width="160">&emsp;<img src="/results/screenshot_4.jpeg" width="160">
+<img src="/results/screenshot_1.jpeg" width="160">&emsp;<img src="/results/screenshot_2.jpeg" width="160">
+<img src="/results/screenshot_3.jpeg" width="160">&emsp;<img src="/results/screenshot_4.jpeg" width="160">
 
 
 # Contributions
